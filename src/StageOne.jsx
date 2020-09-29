@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Timer from './timer.jsx';
 import socketIOClient from 'socket.io-client';
 const temps = require('./templates.js');
 const ENDPOINT = 'http://localhost:3001';
@@ -72,6 +73,12 @@ export default function App() {
   };
   initialFetch();
 
+  const submitMeme = () => {
+    //emit event (url)
+    //send back to server.
+    //server listens for this, sends user to next round.
+  };
+
   useEffect(() => {
     // if (!didMount) {
     // 	setDidMount(true);
@@ -102,12 +109,14 @@ export default function App() {
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
+      <Timer />
       <span>{currentMeme.name}</span>
       <br />
       <img ref={imgRef} src={currentMeme.url} />
       <br />
       {textBoxes}
-      <button onClick={handleClick}>Generate</button>
+      <button onClick={handleClick}>Preview</button>
+      <button onClick={submitMeme}>Submit</button>
     </div>
   );
 }
