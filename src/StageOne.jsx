@@ -1,4 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+<<<<<<< HEAD
+=======
+import Timer from './timer.jsx';
+import socketIOClient from 'socket.io-client';
+>>>>>>> 191c83272d84abdcf9a04b6e48abb587dc74cb3f
 const temps = require('./templates.js');
 
 export default function App() {
@@ -69,6 +74,26 @@ export default function App() {
   };
   initialFetch();
 
+<<<<<<< HEAD
+=======
+  const submitMeme = () => {
+    //emit event (url)
+    //send back to server.
+    //server listens for this, sends user to next round.
+  };
+
+  useEffect(() => {
+    // if (!didMount) {
+    // 	setDidMount(true);
+    // 	fetch('https://api.imgflip.com/get_memes')
+    // 		.then(res => res.json())
+    // 		.then(res => console.log(res.data.memes))
+    // 	// .then(res => setTemplates(res))
+    // }
+    const socket = socketIOClient(ENDPOINT);
+  }, []);
+
+>>>>>>> 191c83272d84abdcf9a04b6e48abb587dc74cb3f
   console.log(texts);
 
   const textBoxes = [];
@@ -88,12 +113,14 @@ export default function App() {
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
+      <Timer />
       <span>{currentMeme.name}</span>
       <br />
       <img ref={imgRef} src={currentMeme.url} />
       <br />
       {textBoxes}
-      <button onClick={handleClick}>Generate</button>
+      <button onClick={handleClick}>Preview</button>
+      <button onClick={submitMeme}>Submit</button>
     </div>
   );
 }
