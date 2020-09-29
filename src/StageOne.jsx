@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import socketIOClient from 'socket.io-client';
 const temps = require('./templates.js');
-const ENDPOINT = 'http://localhost:3001';
 
 export default function App() {
   const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
-  // const [didMount, setDidMount] = useState(false);
   const [templates, setTemplates] = useState(temps);
   const [currentMeme, setCurrentMeme] = useState(
     templates[Math.floor(Math.random() * templates.length)],
@@ -71,17 +68,6 @@ export default function App() {
       .catch(error => console.log('error', error));
   };
   initialFetch();
-
-  useEffect(() => {
-    // if (!didMount) {
-    // 	setDidMount(true);
-    // 	fetch('https://api.imgflip.com/get_memes')
-    // 		.then(res => res.json())
-    // 		.then(res => console.log(res.data.memes))
-    // 	// .then(res => setTemplates(res))
-    // }
-    const socket = socketIOClient(ENDPOINT);
-  }, []);
 
   console.log(texts);
 

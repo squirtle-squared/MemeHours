@@ -9,6 +9,10 @@ const Wrapper = styled.main`
   align-items: center;
   text-align: center;
 `;
+
+const Row = styled.div`
+  display: flex;
+`;
 const Title = styled.h1`
   font-size: 60px;
   text-align: center;
@@ -91,9 +95,9 @@ const StyledChoices = styled.button`
 
 export default function Home() {
   const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
-  const [isClicked, setIsClicked] = useState(false);
-  const [rounds, setRounds] = useState(0);
+  //   const [room, setRoom] = useState('');
+  //   const [isClicked, setIsClicked] = useState(false);
+  //   const [rounds, setRounds] = useState(0);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -103,112 +107,39 @@ export default function Home() {
   return (
     <Wrapper>
       <Title>Meme Hours</Title>
-      <StyledButton
-        onClick={() => {
-          setIsClicked(false);
-        }}
-      >
-        Join Game
-      </StyledButton>
+      {/* <Row>
+        <StyledButton
+          onClick={() => {
+            setIsClicked(false);
+          }}
+        >
+          Join Game
+        </StyledButton>
 
-      <StyledButton
-        onClick={() => {
-          setIsClicked(true);
-        }}
-      >
-        Create Game
-      </StyledButton>
-      {!isClicked && (
-        <FormStyled onSubmit={handleSubmit}>
-          <div>
-            Name
-            <StyledInput
-              value={name}
-              type="text"
-              name="name"
-              onChange={e => {
-                setName(e.target.value);
-              }}
-            ></StyledInput>
-          </div>
-          <div>
-            Room Name
-            <StyledInput
-              value={room}
-              type="text"
-              name="room"
-              onChange={e => {
-                setRoom(e.target.value);
-              }}
-            ></StyledInput>
-          </div>
-          <StyledInputButton type="submit" value="Submit"></StyledInputButton>
-        </FormStyled>
-      )}
+        <StyledButton
+          onClick={() => {
+            setIsClicked(true);
+          }}
+        >
+          Create Game
+        </StyledButton>
+      </Row> */}
 
-      {isClicked && (
-        <FormStyled onSubmit={handleSubmit}>
-          <div>
-            Name
-            <StyledInput
-              value={name}
-              type="text"
-              name="name"
-              onChange={e => {
-                setName(e.target.value);
-              }}
-            ></StyledInput>
-          </div>
-          <div>
-            Room Name
-            <StyledInput
-              value={room}
-              type="text"
-              name="room"
-              onChange={e => {
-                setRoom(e.target.value);
-              }}
-            ></StyledInput>
-          </div>
-          <div>Number of Rounds</div>
-          <StyledSection>
-            <StyledChoices
-              onClick={e => {
-                e.preventDefault();
-                setRounds(5);
-              }}
-            >
-              5
-            </StyledChoices>
-            <StyledChoices
-              onClick={e => {
-                e.preventDefault();
-                setRounds(10);
-              }}
-            >
-              10
-            </StyledChoices>
-            <StyledChoices
-              onClick={e => {
-                e.preventDefault();
-                setRounds(15);
-              }}
-            >
-              15
-            </StyledChoices>
-            <StyledChoices
-              onClick={e => {
-                e.preventDefault();
-                setRounds(20);
-              }}
-            >
-              20
-            </StyledChoices>
-          </StyledSection>
+      <FormStyled onSubmit={handleSubmit}>
+        <div>
+          Name
+          <StyledInput
+            value={name}
+            type="text"
+            name="name"
+            onChange={e => {
+              setName(e.target.value);
+            }}
+          ></StyledInput>
+        </div>
 
-          <StyledInputButton type="submit" value="Submit"></StyledInputButton>
-        </FormStyled>
-      )}
+        <StyledInputButton type="submit" value="Submit"></StyledInputButton>
+      </FormStyled>
 
       <Link to="/main">
         <button>Go to Main</button>
