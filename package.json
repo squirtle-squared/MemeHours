@@ -1,0 +1,56 @@
+{
+  "name": "memehours",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "engines": {
+    "node": "^12"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "webpack -p --mode=production && cp index.html dist/index.html",
+    "start": "webpack-dev-server --open --hot & nodemon server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-server": "node server/server.js",
+    "build-all": "rm -rf dist && npm i && npm run build-prod",
+    "heroku-postbuild": "npm run build-all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heatherfriedman/MemeHours.git"
+  },
+  "author": "Heather Friedman, Will Hack, Kadir Gundogdu, Rebecca Miller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/heatherfriedman/MemeHours/issues"
+  },
+  "homepage": "https://github.com/heatherfriedman/MemeHours#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.13.0",
+    "react-router-dom": "^5.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "@hot-loader/react-dom": "^17.0.0-rc.2",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.2",
+    "file-loader": "^6.1.0",
+    "node-sass": "^4.14.1",
+    "prettier": "^2.1.2",
+    "sass-loader": "^10.0.2",
+    "style-loader": "^1.2.1",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
