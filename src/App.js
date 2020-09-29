@@ -4,7 +4,7 @@ const temps = require('./templates.js');
 const ENDPOINT = 'http://localhost:3001';
 
 export default function App() {
-	const [texts, setTexts] = useState(['', '', '', '', '']);
+	const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
 	// const [didMount, setDidMount] = useState(false);
 	const [templates, setTemplates] = useState(temps);
 	const [currentMeme, setCurrentMeme] = useState(templates[Math.floor(Math.random() * templates.length)])
@@ -54,6 +54,7 @@ export default function App() {
 		const socket = socketIOClient(ENDPOINT);
 	}, []);
 
+	console.log(texts)
 
 	const textBoxes = [];
 	for (let i = 0; i < currentMeme.box_count; i++) {
