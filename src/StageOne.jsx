@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 const temps = require('./templates.js');
@@ -109,24 +108,6 @@ export default function App() {
       <br />
       {textBoxes}
       <button onClick={handleClick}>Generate</button>
-=======
-import React from 'react';
-import StageOne from './StageOne';
-import Home from './Home';
-import { Switch, Route } from 'react-router-dom';
-
-export default function App() {
-  return (
-    <div>
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/main">
-          <StageOne />
-        </Route>
-      </Switch>
->>>>>>> 4dfcd9ece56883a7ed095491657984dda26a19ae
     </div>
   );
 }

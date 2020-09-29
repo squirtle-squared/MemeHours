@@ -108,3 +108,6 @@ dist
 
 # Dist file
 dist
+
+# Package-lock.json
+package-lock.json
