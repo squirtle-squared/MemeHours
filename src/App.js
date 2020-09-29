@@ -43,6 +43,33 @@ export default function App() {
 			.catch(error => console.log('error', error))
 	}
 
+	const initialFetch = () => {
+		var myHeaders = new Headers();
+		// myHeaders.append("Cookie", "__cfduid=d5b06b2df9eda0d63076d8ba50f5642121601326806; iflipsess=dv537v2andm5mkrns95s4se369; claim_key=bz13Qn7QBuqPCCqtTDLZz2Mierh_HXNx");
+		var formdata = new FormData();
+		formdata.append("template_id", currentMeme.id);
+		formdata.append("username", "memehours");
+		formdata.append("password", "csny2020");
+		for (let i = 0; i < currentMeme.box_count; i++) {
+			formdata.append(`boxes[${i}][text]`, i + 1);
+		}
+
+		var requestOptions = {
+			method: 'POST',
+			headers: myHeaders,
+			body: formdata,
+			redirect: 'follow'
+		};
+
+		fetch("https://api.imgflip.com/caption_image", requestOptions)
+			.then(res => res.json())
+			.then(res => {
+				imgRef.current.src = res.data.url
+			})
+			.catch(error => console.log('error', error))
+	}
+	initialFetch();
+
 	useEffect(() => {
 		// if (!didMount) {
 		// 	setDidMount(true);
@@ -58,7 +85,7 @@ export default function App() {
 
 	const textBoxes = [];
 	for (let i = 0; i < currentMeme.box_count; i++) {
-		textBoxes.push(<input type='text' key={`text-${i}`} id={i} value={texts[i]} onChange={handleChange} />)
+		textBoxes.push(<input placeholder={i + 1} type='text' key={`text-${i}`} id={i} value={texts[i]} onChange={handleChange} />)
 	}
 
 	return (
