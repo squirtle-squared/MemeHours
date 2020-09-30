@@ -82,6 +82,7 @@ const Button = styled.button`
 
 export default function Home({ socket }) {
   const [name, setName] = useState('');
+  const [newName, setNewName] = useState('start');
   const [players, setPlayers] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
   const [self, setSelf] = useState({});
@@ -90,8 +91,14 @@ export default function Home({ socket }) {
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    socket.emit('newPlayer', name);
-    setIsClicked(true);
+    if (!name) {
+      setNewName('');
+    }
+    if (name) {
+      setNewName(name);
+      socket.emit('newPlayer', name);
+      setIsClicked(true);
+    }
   };
 
   // logic for what happens when start game is clicked
@@ -131,7 +138,7 @@ export default function Home({ socket }) {
             ></StyledInput>
           </div>
           {/* if correct is false, show this message */}
-          {/* {!nameValue && <div>Please enter a name</div>} */}
+          {!newName && <div>Please enter a name</div>}
           {/* if unique is false, show this message */}
           {/* {!unique && <div>Someone else has that name, please pick a new one!</div>} */}
           <StyledInputButton type="submit" value="Submit"></StyledInputButton>
