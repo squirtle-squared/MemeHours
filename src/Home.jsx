@@ -85,16 +85,25 @@ export default function Home() {
   const [players, setPlayers] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
   const [correct, setCorrect] = useState(true);
+  const [unique, setUnique] = useState(true);
 
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    if (name !== '') {
+    // reset the state for correct and unique
+    setCorrect(true);
+    setUnique(true);
+    // check to see if name is not undefined and is unique
+    if (name !== '' && !players.includes(name)) {
       players.push(name);
       setPlayers(players);
       setIsClicked(true);
-    } else {
+      // if name is not defined set correct to false
+    } else if (name === '') {
       setCorrect(false);
+      // if player is not unique, set unique to false
+    } else if (players.includes(name)) {
+      setUnique(false);
     }
   };
 
@@ -121,7 +130,10 @@ export default function Home() {
               }}
             ></StyledInput>
           </div>
+          {/* if correct is false, show this message */}
           {!correct && <div>Please enter a name</div>}
+          {/* if unique is false, show this message */}
+          {!unique && <div>Someone else has that name, please pick a new one!</div>}
           <StyledInputButton type="submit" value="Submit"></StyledInputButton>
         </FormStyled>
       )}
