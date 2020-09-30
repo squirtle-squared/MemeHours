@@ -84,13 +84,18 @@ export default function Home() {
   const [name, setName] = useState('');
   const [players, setPlayers] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [correct, setCorrect] = useState(true);
 
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    players.push(name);
-    setPlayers(players);
-    setIsClicked(true);
+    if (name !== '') {
+      players.push(name);
+      setPlayers(players);
+      setIsClicked(true);
+    } else {
+      setCorrect(false);
+    }
   };
 
   // logic for what happens when start game is clicked
@@ -116,7 +121,7 @@ export default function Home() {
               }}
             ></StyledInput>
           </div>
-
+          {!correct && <div>Please enter a name</div>}
           <StyledInputButton type="submit" value="Submit"></StyledInputButton>
         </FormStyled>
       )}
