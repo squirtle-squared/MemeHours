@@ -20,9 +20,14 @@ io.on('connection', socket => {
     const playerObject = {
       name: playerName,
       id: socket.id,
+      isHost: players.length < 1,
     };
     players.push(playerObject);
     io.emit('updatePlayers', players);
+    socket.emit('getSelf', playerObject);
+  });
+  socket.on('startGame', () => {
+    io.emit('startGame');
   });
 
   socket.on('disconnect', sckt => {
@@ -32,6 +37,7 @@ io.on('connection', socket => {
         break;
       }
     }
+    if (players.length) players[0].isHost = true;
     io.emit('updatePlayers', players);
     console.log('a user disconnected');
   });

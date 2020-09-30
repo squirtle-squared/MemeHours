@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import WaitingRoom from './WaitingRoom';
 
@@ -84,23 +84,32 @@ export default function Home({ socket }) {
   const [name, setName] = useState('');
   const [players, setPlayers] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [self, setSelf] = useState({});
+  const history = useHistory();
 
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
     socket.emit('newPlayer', name);
-
     setIsClicked(true);
   };
 
   // logic for what happens when start game is clicked
-  const handleClick = () => {
-    console.log('game has been started');
+  const handleClick = e => {
+    e.preventDefault();
+    socket.emit('startGame');
   };
 
   useEffect(() => {
     socket.on('updatePlayers', newPlayers => {
       setPlayers(newPlayers);
+    });
+    socket.on('getSelf', newSelf => {
+      setSelf(newSelf);
+    });
+    socket.on('startGame', () => {
+      console.log('x');
+      history.push('/ideation');
     });
   }, [players]);
 
@@ -133,13 +142,13 @@ export default function Home({ socket }) {
             <WaitingRoom key={index} name={player.name} />
           ))}
           <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
-          <Button onClick={handleClick}>Start Game</Button>
+          {self.isHost ? (
+            <Button onClick={handleClick}>Start Game</Button>
+          ) : (
+            <span>Waiting for the host to start game...</span>
+          )}
         </Div>
       )}
-
-      <Link to="/main">
-        <button>Go to Main</button>
-      </Link>
     </Wrapper>
   );
 }

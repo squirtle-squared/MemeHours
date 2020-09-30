@@ -3,7 +3,7 @@ import Timer from './timer.jsx';
 // import socketIOClient from 'socket.io-client';
 const temps = require('./templates.js');
 
-export default function App() {
+export default function Ideation() {
   const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
   const [templates, setTemplates] = useState(temps);
   const [currentMeme, setCurrentMeme] = useState(
