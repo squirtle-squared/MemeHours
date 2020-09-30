@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import WaitingRoom from './WaitingRoom';
@@ -80,7 +80,7 @@ const Button = styled.button`
   }
 `;
 
-export default function Home() {
+export default function Home({ socket }) {
   const [name, setName] = useState('');
   const [players, setPlayers] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
@@ -88,8 +88,8 @@ export default function Home() {
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    players.push(name);
-    setPlayers(players);
+    socket.emit('newPlayer', name);
+
     setIsClicked(true);
   };
 
@@ -97,6 +97,12 @@ export default function Home() {
   const handleClick = () => {
     console.log('game has been started');
   };
+
+  useEffect(() => {
+    socket.on('updatePlayers', newPlayers => {
+      setPlayers(newPlayers);
+    });
+  }, [players]);
 
   return (
     <Wrapper>
@@ -124,7 +130,7 @@ export default function Home() {
       {isClicked && (
         <Div>
           {players.map((player, index) => (
-            <WaitingRoom key={index} name={player} />
+            <WaitingRoom key={index} name={player.name} />
           ))}
           <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
           <Button onClick={handleClick}>Start Game</Button>

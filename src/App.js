@@ -7,17 +7,12 @@ import io from 'socket.io-client';
 
 export default function App() {
   const socket = io.connect('http://localhost:3001');
-  socket.on('messageFromServer', msg => {
-    console.log(msg);
-
-    socket.emit('messageFromClient', 'happy to be here!');
-  });
 
   return (
     <div>
       <Switch>
         <Route exact path="/">
-          <Home />
+          <Home socket={socket} />
         </Route>
         <Route path="/main">
           <StageOne />
