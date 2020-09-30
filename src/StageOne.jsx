@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Timer from './timer.jsx';
-import socketIOClient from 'socket.io-client';
+// import socketIOClient from 'socket.io-client';
 const temps = require('./templates.js');
-const ENDPOINT = 'http://localhost:3001';
 
 export default function App() {
   const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
-  // const [didMount, setDidMount] = useState(false);
   const [templates, setTemplates] = useState(temps);
   const [currentMeme, setCurrentMeme] = useState(
     templates[Math.floor(Math.random() * templates.length)],
@@ -73,7 +71,7 @@ export default function App() {
   };
   initialFetch();
 
-  const submitMeme = () => {
+  const submitMeme = e => {
     //emit event (url)
     //send back to server.
     //server listens for this, sends user to next round.
@@ -87,7 +85,7 @@ export default function App() {
     // 		.then(res => console.log(res.data.memes))
     // 	// .then(res => setTemplates(res))
     // }
-    const socket = socketIOClient(ENDPOINT);
+    // const socket = socketIOClient(ENDPOINT);
   }, []);
 
   console.log(texts);
