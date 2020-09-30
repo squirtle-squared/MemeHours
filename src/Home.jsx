@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import WaitingRoom from './WaitingRoom';
@@ -80,30 +80,35 @@ const Button = styled.button`
   }
 `;
 
-export default function Home() {
+export default function Home({ socket }) {
   const [name, setName] = useState('');
   const [players, setPlayers] = useState([]);
-  const [isClicked, setIsClicked] = useState(false);
-  const [correct, setCorrect] = useState(true);
+  const [waitingRoom, setWaitingRoom] = useState(false);
+  const [nameValue, setNameValue] = useState(true);
   const [unique, setUnique] = useState(true);
 
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    // reset the state for correct and unique
-    setCorrect(true);
-    setUnique(true);
     // check to see if name is not undefined and is unique
-    if (name !== '' && !players.includes(name)) {
-      players.push(name);
-      setPlayers(players);
-      setIsClicked(true);
-      // if name is not defined set correct to false
-    } else if (name === '') {
-      setCorrect(false);
+    if (name.length) {
       // if player is not unique, set unique to false
-    } else if (players.includes(name)) {
-      setUnique(false);
+      for (let i = 0; i < players.length; i += 1) {
+        if (players[i].name === name) {
+          console.log('name is not unique');
+          setUnique(false);
+        }
+      }
+      // if name is not defined set correct to false
+    }
+    if (!name) {
+      console.log('no name');
+      setNameValue(false);
+    }
+
+    if (nameValue && unique) {
+      setWaitingRoom(true);
+      socket.emit('newPlayer', name);
     }
   };
 
@@ -112,11 +117,17 @@ export default function Home() {
     console.log('game has been started');
   };
 
+  useEffect(() => {
+    socket.on('updatePlayers', newPlayers => {
+      setPlayers(newPlayers);
+    });
+  }, [players]);
+
   return (
     <Wrapper>
       <Title>Meme Hours</Title>
 
-      {!isClicked && (
+      {!waitingRoom && (
         <FormStyled onSubmit={handleSubmit}>
           <div>
             Name
@@ -131,17 +142,17 @@ export default function Home() {
             ></StyledInput>
           </div>
           {/* if correct is false, show this message */}
-          {!correct && <div>Please enter a name</div>}
+          {!nameValue && <div>Please enter a name</div>}
           {/* if unique is false, show this message */}
           {!unique && <div>Someone else has that name, please pick a new one!</div>}
           <StyledInputButton type="submit" value="Submit"></StyledInputButton>
         </FormStyled>
       )}
       {/* when you submit, you render the waiting room from all the current players in state */}
-      {isClicked && (
+      {waitingRoom && (
         <Div>
           {players.map((player, index) => (
-            <WaitingRoom key={index} name={player} />
+            <WaitingRoom key={index} name={player.name} />
           ))}
           <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
           <Button onClick={handleClick}>Start Game</Button>
