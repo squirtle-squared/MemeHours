@@ -97,7 +97,7 @@ export default function Home({ socket }) {
   // logic for what happens when start game is clicked
   const handleClick = e => {
     e.preventDefault();
-    socket.emit('startGame');
+    socket.emit('ideate');
   };
 
   useEffect(() => {
@@ -107,8 +107,7 @@ export default function Home({ socket }) {
     socket.on('getSelf', newSelf => {
       setSelf(newSelf);
     });
-    socket.on('startGame', () => {
-      console.log('x');
+    socket.on('ideate', () => {
       history.push('/ideation');
     });
   }, [players]);

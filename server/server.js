@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const socketIO = require('socket.io');
-
 const path = require('path');
 
 const port = process.env.PORT || 3001;
@@ -26,8 +25,13 @@ io.on('connection', socket => {
     io.emit('updatePlayers', players);
     socket.emit('getSelf', playerObject);
   });
-  socket.on('startGame', () => {
-    io.emit('startGame');
+  socket.on('ideate', () => {
+    io.emit('ideate');
+    io.emit('randomNumber', Math.floor(Math.random() * 100));
+  });
+
+  socket.on('submitImage', arr => {
+    console.log(arr[0], players);
   });
 
   socket.on('disconnect', sckt => {
