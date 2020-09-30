@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import WaitingRoom from './WaitingRoom';
 
@@ -83,47 +83,40 @@ const Button = styled.button`
 export default function Home({ socket }) {
   const [name, setName] = useState('');
   const [players, setPlayers] = useState([]);
-  const [waitingRoom, setWaitingRoom] = useState(false);
-  const [nameValue, setNameValue] = useState(true);
-  const [unique, setUnique] = useState(true);
+  const [isClicked, setIsClicked] = useState(false);
+  const [self, setSelf] = useState({});
+  const history = useHistory();
 
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    // check to see if name is defined
-
-    if (!name) {
-      setNameValue(false);
-    } else {
-      socket.emit('newPlayer', name);
-      setWaitingRoom(true);
-    }
+    socket.emit('newPlayer', name);
+    setIsClicked(true);
   };
 
   // logic for what happens when start game is clicked
-  const handleClick = () => {
-    console.log('game has been started');
+  const handleClick = e => {
+    e.preventDefault();
+    socket.emit('ideate');
   };
 
   useEffect(() => {
     socket.on('updatePlayers', newPlayers => {
       setPlayers(newPlayers);
     });
-
-    socket.on('newPlayer', players => {
-      setPlayers(players);
+    socket.on('getSelf', newSelf => {
+      setSelf(newSelf);
     });
-
-    socket.on('notUnique', unique => {
-      if (!unique) setUnique(false);
+    socket.on('ideate', () => {
+      history.push('/ideation');
     });
-  }, []);
+  }, [players]);
 
   return (
     <Wrapper>
       <Title>Meme Hours</Title>
 
-      {!waitingRoom && (
+      {!isClicked && (
         <FormStyled onSubmit={handleSubmit}>
           <div>
             Name
@@ -138,26 +131,26 @@ export default function Home({ socket }) {
             ></StyledInput>
           </div>
           {/* if correct is false, show this message */}
-          {!nameValue && <div>Please enter a name</div>}
+          {/* {!nameValue && <div>Please enter a name</div>} */}
           {/* if unique is false, show this message */}
-          {!unique && <div>Someone else has that name, please pick a new one!</div>}
+          {/* {!unique && <div>Someone else has that name, please pick a new one!</div>} */}
           <StyledInputButton type="submit" value="Submit"></StyledInputButton>
         </FormStyled>
       )}
       {/* when you submit, you render the waiting room from all the current players in state */}
-      {waitingRoom && (
+      {isClicked && (
         <Div>
           {players.map((player, index) => (
             <WaitingRoom key={index} name={player.name} />
           ))}
           <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
-          <Button onClick={handleClick}>Start Game</Button>
+          {self.isHost ? (
+            <Button onClick={handleClick}>Start Game</Button>
+          ) : (
+            <span>Waiting for the host to start game...</span>
+          )}
         </Div>
       )}
-
-      <Link to="/main">
-        <button>Go to Main</button>
-      </Link>
     </Wrapper>
   );
 }
