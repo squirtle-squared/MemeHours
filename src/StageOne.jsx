@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-<<<<<<< HEAD
-=======
 import Timer from './timer.jsx';
-import socketIOClient from 'socket.io-client';
->>>>>>> 191c83272d84abdcf9a04b6e48abb587dc74cb3f
+// import socketIOClient from 'socket.io-client';
 const temps = require('./templates.js');
 
 export default function App() {
@@ -74,9 +71,7 @@ export default function App() {
   };
   initialFetch();
 
-<<<<<<< HEAD
-=======
-  const submitMeme = () => {
+  const submitMeme = e => {
     //emit event (url)
     //send back to server.
     //server listens for this, sends user to next round.
@@ -90,10 +85,9 @@ export default function App() {
     // 		.then(res => console.log(res.data.memes))
     // 	// .then(res => setTemplates(res))
     // }
-    const socket = socketIOClient(ENDPOINT);
+    // const socket = socketIOClient(ENDPOINT);
   }, []);
 
->>>>>>> 191c83272d84abdcf9a04b6e48abb587dc74cb3f
   console.log(texts);
 
   const textBoxes = [];

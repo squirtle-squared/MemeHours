@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import WaitingRoom from './WaitingRoom';
 
 const Wrapper = styled.main`
   display: flex;
@@ -10,13 +11,14 @@ const Wrapper = styled.main`
   text-align: center;
 `;
 
-const Row = styled.div`
-  display: flex;
-`;
 const Title = styled.h1`
   font-size: 60px;
   text-align: center;
   color: black;
+`;
+
+const SmallerText = styled.div`
+  font-size: 30px;
 `;
 
 const FormStyled = styled.form`
@@ -39,15 +41,6 @@ const StyledInput = styled.input`
   font-size: 30px;
 `;
 
-const StyledSection = styled.section`
-  padding: 20px;
-  margin: 10px;
-  width: 75%;
-  border: dotted;
-  outline: none;
-  font-size: 30px;
-`;
-
 const StyledInputButton = styled.input`
   border: solid 1px;
   padding: 10px;
@@ -62,84 +55,81 @@ const StyledInputButton = styled.input`
   }
 `;
 
-const StyledButton = styled.button`
-  border: solid 1px;
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: dotted 0.5px;
+  width: 50%;
   padding: 10px;
-  margin: 10px;
-  background-color: inherit;
-  font-size: 20px;
-  border-radius: 10px;
-
-  &:hover {
-    background-color: lightblue;
-    cursor: pointer;
-  }
+  font-size: 50px;
+  box-shadow: 9px 9px 40px -12px rgba(0, 0, 0, 0.75);
 `;
 
-const StyledChoices = styled.button`
+const Button = styled.button`
   border: solid 1px;
-  width: 20%;
   padding: 10px;
   margin: 10px;
   background-color: inherit;
   font-size: 30px;
   border-radius: 10px;
+
   &:hover {
     background-color: lightblue;
     cursor: pointer;
-  }
-  &:focus {
-    background-color: lightblue;
   }
 `;
 
 export default function Home() {
   const [name, setName] = useState('');
-  //   const [room, setRoom] = useState('');
-  //   const [isClicked, setIsClicked] = useState(false);
-  //   const [rounds, setRounds] = useState(0);
+  const [players, setPlayers] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
 
+  // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(name, room, rounds);
+    players.push(name);
+    setPlayers(players);
+    setIsClicked(true);
+  };
+
+  // logic for what happens when start game is clicked
+  const handleClick = () => {
+    console.log('game has been started');
   };
 
   return (
     <Wrapper>
       <Title>Meme Hours</Title>
-      {/* <Row>
-        <StyledButton
-          onClick={() => {
-            setIsClicked(false);
-          }}
-        >
-          Join Game
-        </StyledButton>
 
-        <StyledButton
-          onClick={() => {
-            setIsClicked(true);
-          }}
-        >
-          Create Game
-        </StyledButton>
-      </Row> */}
+      {!isClicked && (
+        <FormStyled onSubmit={handleSubmit}>
+          <div>
+            Name
+            <StyledInput
+              value={name}
+              type="text"
+              name="name"
+              // player's name is updated in state
+              onChange={e => {
+                setName(e.target.value);
+              }}
+            ></StyledInput>
+          </div>
 
-      <FormStyled onSubmit={handleSubmit}>
-        <div>
-          Name
-          <StyledInput
-            value={name}
-            type="text"
-            name="name"
-            onChange={e => {
-              setName(e.target.value);
-            }}
-          ></StyledInput>
-        </div>
-
-        <StyledInputButton type="submit" value="Submit"></StyledInputButton>
-      </FormStyled>
+          <StyledInputButton type="submit" value="Submit"></StyledInputButton>
+        </FormStyled>
+      )}
+      {/* when you submit, you render the waiting room from all the current players in state */}
+      {isClicked && (
+        <Div>
+          {players.map((player, index) => (
+            <WaitingRoom key={index} name={player} />
+          ))}
+          <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
+          <Button onClick={handleClick}>Start Game</Button>
+        </Div>
+      )}
 
       <Link to="/main">
         <button>Go to Main</button>

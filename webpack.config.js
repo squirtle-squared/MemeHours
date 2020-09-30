@@ -36,7 +36,16 @@ module.exports = {
     },
   },
   devServer: {
+    host: 'localhost',
+    port: 8080,
     contentBase: path.resolve(__dirname, 'dist'),
     historyApiFallback: true,
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    proxy: {
+      '/': {
+        target: 'http://localhost:3001/',
+        secure: false,
+      },
+    },
   },
 };
