@@ -21,5 +21,5 @@ const Div = styled.div`
 `;
 
 export default function WaitingRoom(props) {
-  return <Wrapper>{props.name} is waiting!</Wrapper>;
+  return <Wrapper>{props.name} is in the room!</Wrapper>;
 }

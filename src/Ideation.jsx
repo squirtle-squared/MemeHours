@@ -3,12 +3,10 @@ import Timer from './timer.jsx';
 // import socketIOClient from 'socket.io-client';
 const temps = require('./templates.js');
 
-export default function App() {
+export default function Ideation({ socket }) {
   const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
   const [templates, setTemplates] = useState(temps);
-  const [currentMeme, setCurrentMeme] = useState(
-    templates[Math.floor(Math.random() * templates.length)],
-  );
+  const [currentMeme, setCurrentMeme] = useState(null);
   const imgRef = useRef(null);
 
   const handleChange = e => {
@@ -17,7 +15,12 @@ export default function App() {
     setTexts(inputFields);
   };
 
-  const handleClick = e => {
+  const handleSubmit = e => {
+    e.preventDefault();
+    socket.emit('submitImage', [socket.id, imgRef.current.src]);
+  };
+
+  const handlePreview = e => {
     e.preventDefault();
     var myHeaders = new Headers();
     // myHeaders.append("Cookie", "__cfduid=d5b06b2df9eda0d63076d8ba50f5642121601326806; iflipsess=dv537v2andm5mkrns95s4se369; claim_key=bz13Qn7QBuqPCCqtTDLZz2Mierh_HXNx");
@@ -54,7 +57,6 @@ export default function App() {
     for (let i = 0; i < currentMeme.box_count; i++) {
       formdata.append(`boxes[${i}][text]`, i + 1);
     }
-
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -69,52 +71,44 @@ export default function App() {
       })
       .catch(error => console.log('error', error));
   };
-  initialFetch();
-
-  const submitMeme = e => {
-    //emit event (url)
-    //send back to server.
-    //server listens for this, sends user to next round.
-  };
 
   useEffect(() => {
-    // if (!didMount) {
-    // 	setDidMount(true);
-    // 	fetch('https://api.imgflip.com/get_memes')
-    // 		.then(res => res.json())
-    // 		.then(res => console.log(res.data.memes))
-    // 	// .then(res => setTemplates(res))
-    // }
-    // const socket = socketIOClient(ENDPOINT);
+    if (currentMeme) {
+      initialFetch();
+    }
+  }, [currentMeme]);
+
+  useEffect(() => {
+    socket.on('randomNumber', num => {
+      setCurrentMeme(templates[num]);
+    });
   }, []);
-
-  console.log(texts);
-
   const textBoxes = [];
-  for (let i = 0; i < currentMeme.box_count; i++) {
-    textBoxes.push(
-      <input
-        placeholder={i + 1}
-        type="text"
-        key={`text-${i}`}
-        id={i}
-        value={texts[i]}
-        onChange={handleChange}
-      />,
-    );
+  if (currentMeme) {
+    for (let i = 0; i < currentMeme.box_count; i++) {
+      textBoxes.push(
+        <input
+          placeholder={i + 1}
+          type="text"
+          key={`text-${i}`}
+          id={i}
+          value={texts[i]}
+          onChange={handleChange}
+        />,
+      );
+    }
   }
-
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
       <Timer />
-      <span>{currentMeme.name}</span>
+      {currentMeme && <span>{currentMeme.name}</span>}
       <br />
-      <img ref={imgRef} src={currentMeme.url} />
+      {currentMeme && <img ref={imgRef} src={currentMeme.url} />}
       <br />
-      {textBoxes}
-      <button onClick={handleClick}>Preview</button>
-      <button onClick={submitMeme}>Submit</button>
+      {currentMeme && textBoxes}
+      <button onClick={handlePreview}>Preview</button>
+      <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 }

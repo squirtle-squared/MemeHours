@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const socketIO = require('socket.io');
-
 const path = require('path');
 
 const port = process.env.PORT || 3001;
@@ -20,9 +19,19 @@ io.on('connection', socket => {
     const playerObject = {
       name: playerName,
       id: socket.id,
+      isHost: players.length < 1,
     };
     players.push(playerObject);
     io.emit('updatePlayers', players);
+    socket.emit('getSelf', playerObject);
+  });
+  socket.on('ideate', () => {
+    io.emit('ideate');
+    io.emit('randomNumber', Math.floor(Math.random() * 100));
+  });
+
+  socket.on('submitImage', arr => {
+    console.log(arr[0], players);
   });
 
   socket.on('disconnect', sckt => {
@@ -32,6 +41,7 @@ io.on('connection', socket => {
         break;
       }
     }
+    if (players.length) players[0].isHost = true;
     io.emit('updatePlayers', players);
     console.log('a user disconnected');
   });
