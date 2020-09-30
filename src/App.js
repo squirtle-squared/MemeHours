@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 export default function App() {
   const socket = io.connect('http://localhost:3001');
   socket.on('messageFromServer', msg => {
-    console.log(msg);
+    console.log(msg.data);
     socket.emit('messageFromClient', { data: 'message from client' });
   });
   return (
