@@ -21,8 +21,16 @@ io.on('connection', socket => {
       name: playerName,
       id: socket.id,
     };
-    players.push(playerObject);
-    io.emit('updatePlayers', players);
+    let unique = true;
+    for (let i = 0; i < players.length; i += 1) {
+      const { name } = players[i];
+      if (name === playerName) {
+        unique = false;
+      }
+    }
+    if (unique) players.push(playerObject);
+    if (!unique) io.emit('notUnique', unique);
+    io.emit('newPlayer', players);
   });
 
   socket.on('disconnect', sckt => {

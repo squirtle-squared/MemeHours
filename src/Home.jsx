@@ -90,25 +90,13 @@ export default function Home({ socket }) {
   // when submitted, player's name is pushed into player's array to be stored in state
   const handleSubmit = e => {
     e.preventDefault();
-    // check to see if name is not undefined and is unique
-    if (name.length) {
-      // if player is not unique, set unique to false
-      for (let i = 0; i < players.length; i += 1) {
-        if (players[i].name === name) {
-          console.log('name is not unique');
-          setUnique(false);
-        }
-      }
-      // if name is not defined set correct to false
-    }
-    if (!name) {
-      console.log('no name');
-      setNameValue(false);
-    }
+    // check to see if name is defined
 
-    if (nameValue && unique) {
-      setWaitingRoom(true);
+    if (!name) {
+      setNameValue(false);
+    } else {
       socket.emit('newPlayer', name);
+      setWaitingRoom(true);
     }
   };
 
@@ -121,7 +109,15 @@ export default function Home({ socket }) {
     socket.on('updatePlayers', newPlayers => {
       setPlayers(newPlayers);
     });
-  }, [players]);
+
+    socket.on('newPlayer', players => {
+      setPlayers(players);
+    });
+
+    socket.on('notUnique', unique => {
+      if (!unique) setUnique(false);
+    });
+  }, []);
 
   return (
     <Wrapper>
