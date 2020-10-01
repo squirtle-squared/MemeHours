@@ -7,6 +7,9 @@ export default function Voting({ socket }) {
   const history = useHistory();
   let memes;
 
+  //another timer to track voting - 1 min
+  //same conditional rendering as ideation
+
   socket.emit('getCandidates');
 
   useEffect(() => {
