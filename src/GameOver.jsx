@@ -9,12 +9,12 @@ export default function GameOver({ socket, setRound, winners, setWinners, self }
   };
 
   useEffect(() => {
-    setRound(1);
     socket.emit('getWinners');
     socket.on('getWinners', memes => {
       setWinners(memes);
     });
     socket.on('reset', () => {
+      setRound(1);
       history.push('/');
     });
   }, []);

@@ -28,14 +28,11 @@ export default function Voting({ socket, self }) {
   const handleDislike = (e, i) => {
     e.preventDefault();
     const dislikedCandidates = [...candidates];
-    console.log('candidates', candidates);
-    console.log('likes', likes);
-    if (likes[i]) {
+    if (likes[i] > 0) {
       dislikedCandidates[i].likes -= 1;
       const updatedLikes = [...likes];
       updatedLikes[i]--;
       setLikes(updatedLikes);
-      console.log('updated', dislikedCandidates);
     }
     socket.emit('updateCandidates', dislikedCandidates);
   };
@@ -60,7 +57,7 @@ export default function Voting({ socket, self }) {
 
   return (
     <div>
-      <Timer mins={0} secs={59} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={15} setTimesUp={setTimesUp} />
       {candidates.length &&
         candidates.map((meme, i) => (
           <div key={`candidate-${i}`}>

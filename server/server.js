@@ -38,10 +38,10 @@ io.on('connection', socket => {
   //   io.emit('randomNumber', Math.floor(Math.random() * 100));
   // });
 
-  socket.on('submitImage', ([name, id, memeUrl]) => {
+  socket.on('submitImage', ([name, id, memeUrl, round]) => {
     // console.log(name, memeUrl);
     // once submissions line 16 length === players length move on
-    submissions.push({ name, id, memeUrl, likes: 0 });
+    submissions.push({ name, id, memeUrl, likes: 0, round, roundWinner: false });
     // console.log(submissions);
     if (submissions.length === players.length) io.emit('voting');
   });
@@ -75,10 +75,12 @@ io.on('connection', socket => {
     socket.emit('getWinners', roundWinners);
   });
   socket.on('gameOver', () => {
+    round = 1;
     io.emit('gameOver');
   });
   socket.on('reset', () => {
     roundWinners = [];
+    round = 1;
     io.emit('reset');
   });
 
