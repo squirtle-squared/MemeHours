@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Candidates from './Candidates';
 import Timer from './Timer.jsx';
 
-export default function Voting({ socket }) {
+export default function Voting({ socket, self }) {
   const [candidates, setCandidates] = useState([]);
   const history = useHistory();
   const [likes, setLikes] = useState([]);
@@ -60,18 +60,22 @@ export default function Voting({ socket }) {
 
   return (
     <div>
-      <Timer mins={0} secs={6} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={59} setTimesUp={setTimesUp} />
       {candidates.length &&
         candidates.map((meme, i) => (
           <div key={`candidate-${i}`}>
             <p>Meme {i + 1}</p>
-            <img src={meme.memeUrl} />
+            {self.id !== meme.id && (
+              <div>
+                <button onClick={e => handleClick(e, i)}>Like</button>
+                {likes[i] > 0 && <button onClick={e => handleDislike(e, i)}>Unlike</button>}
+                {likes[i] > 0 && <span>You have liked this meme {likes[i]} times</span>}
+              </div>
+            )}
+            {self.id === meme.id && <p>Your meme</p>}
             <div>
-              <button onClick={e => handleClick(e, i)}>+</button>
-              <p>{likes} likes</p>
-              <button onClick={e => handleDislike(e, i)}>-</button>
+              <img src={meme.memeUrl} />
             </div>
-            <span>{likes[i] && <span> You liked this meme {likes[i]} times</span>}</span>
           </div>
         ))}
       {!candidates.length && (
