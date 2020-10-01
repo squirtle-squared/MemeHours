@@ -9,10 +9,11 @@ export default function Winner({
   setAllSubmitted,
   round,
   setRound,
+  winner,
+  setWinner,
 }) {
   const history = useHistory();
   const [timesUp, setTimesUp] = useState(false);
-  const [winner, setWinner] = useState({});
 
   useEffect(() => {
     socket.emit('getCandidates');
@@ -32,7 +33,7 @@ export default function Winner({
   useEffect(() => {
     if (timesUp) {
       socket.emit('newRound', round + 1);
-      if (round + 1 === 4) {
+      if (round + 1 === 3) {
         socket.emit('gameOver');
       } else {
         socket.emit('ideate');
@@ -62,13 +63,19 @@ export default function Winner({
 
   return (
     <div>
-      <Timer mins={0} secs={10} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={2} setTimesUp={setTimesUp} />
       <h1>The Winning Meme of Round {round}</h1>
       {winner && (
         <div>
           <h3>Creator: {winner.name}</h3>
           <h3>Points: {winner.likes}</h3>
           <img src={winner.memeUrl} />
+        </div>
+      )}
+      {!winner && (
+        <div>
+          <h1>Nobody submitted a meme!</h1>
+          <img src="https://i.imgflip.com/4gyg7a.jpg" />
         </div>
       )}
     </div>

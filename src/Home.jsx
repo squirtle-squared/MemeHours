@@ -92,6 +92,8 @@ export default function Home({ socket }) {
   const [submitClicked, setSubmitClicked] = useState(false);
   const [ideationTimesUp, setIdeationTimesUp] = useState(false);
   const [allSubmitted, setAllSubmitted] = useState(false);
+  const [winners, setWinners] = useState([]);
+  const [winner, setWinner] = useState({});
   const [self, setSelf] = useState({});
   const [round, setRound] = useState(1);
   const [winningMemes, setWinningMemes] = useState([]);
@@ -158,7 +160,7 @@ export default function Home({ socket }) {
           {isClicked && (
             <Div>
               {players.map((player, index) => (
-                <WaitingRoom key={index} name={player.name} />
+                <WaitingRoom key={index} name={player.name} self={self} />
               ))}
               <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
               {self.isHost ? (
@@ -179,6 +181,8 @@ export default function Home({ socket }) {
           allSubmitted={allSubmitted}
           setIdeationTimesUp={setIdeationTimesUp}
           setAllSubmitted={setAllSubmitted}
+          winners={winners}
+          setWinners={setWinners}
           socket={socket}
           name={self.name}
           id={self.id}
@@ -195,10 +199,18 @@ export default function Home({ socket }) {
           socket={socket}
           round={round}
           setRound={setRound}
+          winner={winner}
+          setWinner={setWinner}
         />
       </Route>
       <Route path="/gameOver">
-        <GameOver setRound={setRound} socket={socket} />
+        <GameOver
+          self={self}
+          winners={winners}
+          setWinners={setWinners}
+          setRound={setRound}
+          socket={socket}
+        />
       </Route>
     </Switch>
   );

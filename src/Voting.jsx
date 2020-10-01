@@ -60,7 +60,7 @@ export default function Voting({ socket }) {
 
   return (
     <div>
-      <Timer mins={0} secs={20} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={6} setTimesUp={setTimesUp} />
       {candidates.length &&
         candidates.map((meme, i) => (
           <div key={`candidate-${i}`}>
@@ -74,6 +74,12 @@ export default function Voting({ socket }) {
             <span>{likes[i] && <span> You liked this meme {likes[i]} times</span>}</span>
           </div>
         ))}
+      {!candidates.length && (
+        <div>
+          <h1>Nobody submitted a meme!</h1>
+          <img src="https://i.imgflip.com/4gyhog.jpg" />
+        </div>
+      )}
     </div>
   );
 }

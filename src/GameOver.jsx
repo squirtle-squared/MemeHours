@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Switch, Route, Link, useHistory } from 'react-router-dom';
 
-export default function GameOver({ socket, setRound }) {
+export default function GameOver({ socket, setRound, winners, setWinners, self }) {
   const history = useHistory();
-  const [winners, setWinners] = useState([]);
   const handleClick = e => {
     e.preventDefault();
     socket.emit('reset');
@@ -16,8 +15,6 @@ export default function GameOver({ socket, setRound }) {
       setWinners(memes);
     });
     socket.on('reset', () => {
-      setWinners([]);
-      socket.emit('deleteWinners');
       history.push('/');
     });
   }, []);
@@ -34,7 +31,7 @@ export default function GameOver({ socket, setRound }) {
             <img src={meme.memeUrl} />
           </div>
         ))}
-      <button onClick={handleClick}>Restart Meme Hours</button>
+      {self.isHost && <button onClick={handleClick}>Restart Meme Hours</button>}
     </div>
   );
 }

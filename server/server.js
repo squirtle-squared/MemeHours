@@ -78,10 +78,8 @@ io.on('connection', socket => {
     io.emit('gameOver');
   });
   socket.on('reset', () => {
-    io.emit('reset');
-  });
-  socket.on('deleteWinners', () => {
     roundWinners = [];
+    io.emit('reset');
   });
 
   socket.on('disconnect', sckt => {
