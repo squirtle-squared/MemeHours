@@ -9,10 +9,11 @@ export default function Winner({
   setAllSubmitted,
   round,
   setRound,
+  winner,
+  setWinner,
 }) {
   const history = useHistory();
   const [timesUp, setTimesUp] = useState(false);
-  const [winner, setWinner] = useState({});
 
   useEffect(() => {
     socket.emit('getCandidates');
@@ -69,6 +70,12 @@ export default function Winner({
           <h3>Creator: {winner.name}</h3>
           <h3>Points: {winner.likes}</h3>
           <img src={winner.memeUrl} />
+        </div>
+      )}
+      {!winner && (
+        <div>
+          <h1>Nobody submitted a meme!</h1>
+          <img src="https://i.imgflip.com/4gyg7a.jpg" />
         </div>
       )}
     </div>

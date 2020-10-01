@@ -55,6 +55,12 @@ export default function Voting({ socket }) {
             <span>{likes[i] && <span> You liked this meme {likes[i]} times</span>}</span>
           </div>
         ))}
+      {!candidates.length && (
+        <div>
+          <h1>Nobody submitted a meme!</h1>
+          <img src="https://i.imgflip.com/4gyhog.jpg" />
+        </div>
+      )}
     </div>
   );
 }

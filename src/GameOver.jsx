@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Switch, Route, Link, useHistory } from 'react-router-dom';
 
-export default function GameOver({ socket, setRound, winners, setWinners }) {
+export default function GameOver({ socket, setRound, winners, setWinners, self }) {
   const history = useHistory();
   const handleClick = e => {
     e.preventDefault();
@@ -27,16 +27,11 @@ export default function GameOver({ socket, setRound, winners, setWinners }) {
               <p>Round: {i + 1} </p>
               <p>Creator: {meme.name} </p>
               <p>Points: {meme.likes}</p>
-              <button>
-                <Link to={meme.memeUrl} target="_blank" download>
-                  Click to Download
-                </Link>
-              </button>
             </div>
             <img src={meme.memeUrl} />
           </div>
         ))}
-      <button onClick={handleClick}>Restart Meme Hours</button>
+      {self.isHost && <button onClick={handleClick}>Restart Meme Hours</button>}
     </div>
   );
 }
