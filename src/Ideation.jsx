@@ -7,6 +7,9 @@ export default function Ideation({ socket, name, id }) {
   const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
   const [templates, setTemplates] = useState(temps);
   const [currentMeme, setCurrentMeme] = useState(null);
+  const [submitClicked, setSubmitClicked] = useState(false);
+  const [timesUp, setTimesUp] = useState(false);
+  const [allSubmitted, setAllSubmitted] = useState(false);
   const imgRef = useRef(null);
   const history = useHistory();
 
@@ -19,6 +22,7 @@ export default function Ideation({ socket, name, id }) {
   const handleSubmit = e => {
     e.preventDefault();
     socket.emit('submitImage', [name, id, imgRef.current.src]);
+    setSubmitClicked(true);
   };
 
   const handlePreview = e => {
@@ -84,9 +88,13 @@ export default function Ideation({ socket, name, id }) {
       setCurrentMeme(templates[num]);
     });
     socket.on('voting', () => {
-      history.push('/voting');
+      setAllSubmitted(true);
     });
   }, []);
+
+  useEffect(() => {
+    if (allSubmitted || timesUp) history.push('/voting');
+  }, [allSubmitted, timesUp]);
 
   const textBoxes = [];
   if (currentMeme) {
@@ -106,14 +114,30 @@ export default function Ideation({ socket, name, id }) {
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
-      <Timer mins={1} secs={30} />
-      {currentMeme && <span>{currentMeme.name}</span>}
-      <br />
-      {currentMeme && <img ref={imgRef} src={currentMeme.url} />}
-      <br />
-      {currentMeme && textBoxes}
-      <button onClick={handlePreview}>Preview</button>
-      <button onClick={handleSubmit}>Submit</button>
+      <Timer mins={0} secs={20} setTimesUp={setTimesUp} />
+      {currentMeme && (
+        <div>
+          <span>{currentMeme.name}</span>
+          <br />
+          <img ref={imgRef} src={currentMeme.url} />
+          <br />
+        </div>
+      )}
+      {!timesUp && !submitClicked && (
+        <div>
+          {textBoxes}
+          <button onClick={handlePreview}>Preview</button>
+          <button onClick={handleSubmit}>Submit</button>
+        </div>
+      )}
+      {!timesUp && submitClicked && (
+        <div>
+          <h1>
+            You have successfully submitted your meme! Please wait for others to submit or the time
+            to run out to continue!
+          </h1>
+        </div>
+      )}
     </div>
   );
 }
