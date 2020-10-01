@@ -167,7 +167,7 @@ export default function Home({ socket }) {
         </Wrapper>
       </Route>
       <Route path="/ideation">
-        <Ideation socket={socket} />
+        <Ideation socket={socket} name={self.name} id={self.id} />
       </Route>
       <Route path="/voting">
         <Voting socket={socket} />
