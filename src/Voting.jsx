@@ -25,6 +25,21 @@ export default function Voting({ socket }) {
       socket.emit('updateCandidates', newCandidates);
     }
   };
+  const handleDislike = (e, i) => {
+    e.preventDefault();
+    const dislikedCandidates = [...candidates];
+    console.log('candidates', candidates);
+    console.log('likes', likes);
+    if (likes[i]) {
+      dislikedCandidates[i].likes -= 1;
+      const updatedLikes = [...likes];
+      updatedLikes[i]--;
+      setLikes(updatedLikes);
+      console.log('updated', dislikedCandidates);
+    }
+    socket.emit('updateCandidates', dislikedCandidates);
+  };
+
   let memes;
 
   //another timer to track voting - 1 min
@@ -51,7 +66,11 @@ export default function Voting({ socket }) {
           <div key={`candidate-${i}`}>
             <p>Meme {i + 1}</p>
             <img src={meme.memeUrl} />
-            <button onClick={e => handleClick(e, i)}>Like</button>
+            <div>
+              <button onClick={e => handleClick(e, i)}>+</button>
+              <p>{likes} likes</p>
+              <button onClick={e => handleDislike(e, i)}>-</button>
+            </div>
             <span>{likes[i] && <span> You liked this meme {likes[i]} times</span>}</span>
           </div>
         ))}
