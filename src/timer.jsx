@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function Timer({ mins, secs }) {
+export default function Timer({ mins, secs, setTimesUp }) {
   const [minutes, setMinutes] = useState(mins);
   const [seconds, setSeconds] = useState(secs);
 
@@ -12,7 +12,7 @@ export default function Timer({ mins, secs }) {
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(myInterval);
-          alert("Time's Up!");
+          setTimesUp(true);
         } else {
           setMinutes(minutes => minutes - 1);
           setSeconds(59);
