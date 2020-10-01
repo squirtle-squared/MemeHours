@@ -41,7 +41,7 @@ io.on('connection', socket => {
   socket.on('submitImage', ([name, id, memeUrl, round]) => {
     // console.log(name, memeUrl);
     // once submissions line 16 length === players length move on
-    submissions.push({ name, id, memeUrl, likes: 0, round, roundWinner: false });
+    submissions.push({ name, id, memeUrl, likes: 0, round });
     // console.log(submissions);
     if (submissions.length === players.length) io.emit('voting');
   });
@@ -61,7 +61,11 @@ io.on('connection', socket => {
         for (let winner of roundWinners) {
           if (meme.memeUrl === winner.memeUrl) isInList = true;
         }
-        if (!isInList) roundWinners.push(meme);
+        if (!isInList) {
+          roundWinners.push(meme);
+          io.emit('roundWinner', meme);
+          io.emit('roundWinners', roundWinners);
+        }
       }
     }
   });
