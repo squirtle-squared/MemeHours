@@ -71,7 +71,7 @@ export default function Winner({
 
   return (
     <div>
-      <Timer mins={0} secs={2} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={5} setTimesUp={setTimesUp} />
       <h1>The Winning Meme of Round {round}</h1>
       {winner && (
         <div>
