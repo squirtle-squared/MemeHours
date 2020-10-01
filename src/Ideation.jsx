@@ -123,7 +123,7 @@ export default function Ideation({
     <div>
       <p>HELLO MEME HOURS!!!</p>
       <h1>Round {round}</h1>
-      <Timer mins={0} secs={3} setTimesUp={setIdeationTimesUp} />
+      <Timer mins={0} secs={50} setTimesUp={setIdeationTimesUp} />
       {currentMeme && (
         <div>
           <span>{currentMeme.name}</span>
