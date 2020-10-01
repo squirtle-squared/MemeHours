@@ -39,6 +39,10 @@ io.on('connection', socket => {
     if (submissions.length === players.length) io.emit('voting');
   });
 
+  socket.on('getCandidates', () => {
+    socket.emit('memeCandidates', submissions);
+  });
+
   socket.on('disconnect', sckt => {
     // removal from users array
     for (let i = 0; i < players.length; i++) {

@@ -10,10 +10,5 @@ export default function GameOver({ socket }) {
     });
   }, []);
 
-  return (
-    <div>
-
-    </div>
-  )
-
+  return <div></div>;
 }

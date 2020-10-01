@@ -114,7 +114,7 @@ export default function Ideation({ socket, name, id }) {
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
-      <Timer mins={0} secs={20} setTimesUp={setTimesUp} />
+      <Timer mins={1} secs={0} setTimesUp={setTimesUp} />
       {currentMeme && (
         <div>
           <span>{currentMeme.name}</span>
