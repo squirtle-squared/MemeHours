@@ -89,7 +89,11 @@ export default function Home({ socket }) {
   const [newName, setNewName] = useState('start');
   const [players, setPlayers] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [submitClicked, setSubmitClicked] = useState(false);
+  const [ideationTimesUp, setIdeationTimesUp] = useState(false);
+  const [allSubmitted, setAllSubmitted] = useState(false);
   const [self, setSelf] = useState({});
+  const [round, setRound] = useState(1);
   const [winningMemes, setWinningMemes] = useState([]);
   const history = useHistory();
 
@@ -167,16 +171,34 @@ export default function Home({ socket }) {
         </Wrapper>
       </Route>
       <Route path="/ideation">
-        <Ideation socket={socket} name={self.name} id={self.id} />
+        <Ideation
+          round={round}
+          submitClicked={submitClicked}
+          ideationTimesUp={ideationTimesUp}
+          setSubmitClicked={setSubmitClicked}
+          allSubmitted={allSubmitted}
+          setIdeationTimesUp={setIdeationTimesUp}
+          setAllSubmitted={setAllSubmitted}
+          socket={socket}
+          name={self.name}
+          id={self.id}
+        />
       </Route>
       <Route path="/voting">
         <Voting socket={socket} />
       </Route>
       <Route path="/winner">
-        <Winner socket={socket} />
+        <Winner
+          setSubmitClicked={setSubmitClicked}
+          setIdeationTimesUp={setIdeationTimesUp}
+          setAllSubmitted={setAllSubmitted}
+          socket={socket}
+          round={round}
+          setRound={setRound}
+        />
       </Route>
       <Route path="/gameOver">
-        <GameOver socket={socket} />
+        <GameOver setRound={setRound} socket={socket} />
       </Route>
     </Switch>
   );
