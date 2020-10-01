@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import Ideation from './Ideation';
 import WaitingRoom from './WaitingRoom';
+import Voting from './Voting';
+import Winner from './Winner';
+import GameOver from './GameOver';
 
 const Wrapper = styled.main`
   display: flex;
@@ -86,6 +90,7 @@ export default function Home({ socket }) {
   const [players, setPlayers] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
   const [self, setSelf] = useState({});
+  const [winningMemes, setWinningMemes] = useState([]);
   const history = useHistory();
 
   // when submitted, player's name is pushed into player's array to be stored in state
@@ -120,44 +125,59 @@ export default function Home({ socket }) {
   }, [players]);
 
   return (
-    <Wrapper>
-      <Title>Meme Hours</Title>
-
-      {!isClicked && (
-        <FormStyled onSubmit={handleSubmit}>
-          <div>
-            Name
-            <StyledInput
-              value={name}
-              type="text"
-              name="name"
-              // player's name is updated in state
-              onChange={e => {
-                setName(e.target.value);
-              }}
-            ></StyledInput>
-          </div>
-          {/* if correct is false, show this message */}
-          {!newName && <div>Please enter a name</div>}
-          {/* if unique is false, show this message */}
-          {/* {!unique && <div>Someone else has that name, please pick a new one!</div>} */}
-          <StyledInputButton type="submit" value="Submit"></StyledInputButton>
-        </FormStyled>
-      )}
-      {/* when you submit, you render the waiting room from all the current players in state */}
-      {isClicked && (
-        <Div>
-          {players.map((player, index) => (
-            <WaitingRoom key={index} name={player.name} />
-          ))}
-          <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
-          {self.isHost ? (
-            <Button onClick={handleClick}>Start Game</Button>
-          ) : (
-            <span>Waiting for the host to start game...</span>
+    <Switch>
+      <Route exact path="/">
+        <Wrapper>
+          <Title>Meme Hours</Title>
+          {!isClicked && (
+            <FormStyled onSubmit={handleSubmit}>
+              <div>
+                Name
+                <StyledInput
+                  value={name}
+                  type="text"
+                  name="name"
+                  // player's name is updated in state
+                  onChange={e => {
+                    setName(e.target.value);
+                  }}
+                ></StyledInput>
+              </div>
+              {/* if correct is false, show this message */}
+              {!newName && <div>Please enter a name</div>}
+              {/* if unique is false, show this message */}
+              {/* {!unique && <div>Someone else has that name, please pick a new one!</div>} */}
+              <StyledInputButton type="submit" value="Submit"></StyledInputButton>
+            </FormStyled>
           )}
-        </Div>
-      )}
-    </Wrapper>
+          {/* when you submit, you render the waiting room from all the current players in state */}
+          {isClicked && (
+            <Div>
+              {players.map((player, index) => (
+                <WaitingRoom key={index} name={player.name} />
+              ))}
+              <SmallerText>{players.length} player(s) are ready to play!</SmallerText>
+              {self.isHost ? (
+                <Button onClick={handleClick}>Start Game</Button>
+              ) : (
+                <span>Waiting for the host to start game...</span>
+              )}
+            </Div>
+          )}
+        </Wrapper>
+      </Route>
+      <Route path="/ideation">
+        <Ideation socket={socket} name={self.name} id={self.id} />
+      </Route>
+      <Route path="/voting">
+        <Voting socket={socket} />
+      </Route>
+      <Route path="/winner">
+        <Winner socket={socket} />
+      </Route>
+      <Route path="/gameOver">
+        <GameOver socket={socket} />
+      </Route>
+    </Switch>
   );
 }

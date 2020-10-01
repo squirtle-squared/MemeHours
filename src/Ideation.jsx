@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Timer from './timer.jsx';
-// import socketIOClient from 'socket.io-client';
+import { useHistory } from 'react-router-dom';
+import Timer from './Timer.jsx';
 const temps = require('./templates.js');
 
-export default function Ideation({ socket }) {
+export default function Ideation({ socket, name, id }) {
   const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
   const [templates, setTemplates] = useState(temps);
   const [currentMeme, setCurrentMeme] = useState(null);
   const imgRef = useRef(null);
+  const history = useHistory();
 
   const handleChange = e => {
     const inputFields = [...texts];
@@ -17,7 +18,7 @@ export default function Ideation({ socket }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    socket.emit('submitImage', [socket.id, imgRef.current.src]);
+    socket.emit('submitImage', [name, id, imgRef.current.src]);
   };
 
   const handlePreview = e => {
@@ -82,7 +83,11 @@ export default function Ideation({ socket }) {
     socket.on('randomNumber', num => {
       setCurrentMeme(templates[num]);
     });
+    socket.on('voting', () => {
+      history.push('/voting');
+    });
   }, []);
+
   const textBoxes = [];
   if (currentMeme) {
     for (let i = 0; i < currentMeme.box_count; i++) {
@@ -101,7 +106,7 @@ export default function Ideation({ socket }) {
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
-      <Timer />
+      <Timer mins={1} secs={30} />
       {currentMeme && <span>{currentMeme.name}</span>}
       <br />
       {currentMeme && <img ref={imgRef} src={currentMeme.url} />}
