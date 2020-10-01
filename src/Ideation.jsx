@@ -14,8 +14,10 @@ export default function Ideation({
   setIdeationTimesUp,
   allSubmitted,
   setAllSubmitted,
+  winners,
+  setWinners,
 }) {
-  const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
+  const [texts, setTexts] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [templates, setTemplates] = useState(temps);
   const [currentMeme, setCurrentMeme] = useState(null);
   const imgRef = useRef(null);
@@ -98,6 +100,7 @@ export default function Ideation({
     socket.on('voting', () => {
       setAllSubmitted(true);
     });
+    setWinners([]);
   }, []);
 
   useEffect(() => {
@@ -123,7 +126,7 @@ export default function Ideation({
     <div>
       <p>HELLO MEME HOURS!!!</p>
       <h1>Round {round}</h1>
-      <Timer mins={0} secs={50} setTimesUp={setIdeationTimesUp} />
+      <Timer mins={0} secs={6} setTimesUp={setIdeationTimesUp} />
       {currentMeme && (
         <div>
           <span>{currentMeme.name}</span>

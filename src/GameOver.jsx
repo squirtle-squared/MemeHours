@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Switch, Route, Link, useHistory } from 'react-router-dom';
 
-export default function GameOver({ socket, setRound }) {
+export default function GameOver({ socket, setRound, winners, setWinners }) {
   const history = useHistory();
-  const [winners, setWinners] = useState([]);
   const handleClick = e => {
     e.preventDefault();
     socket.emit('reset');
@@ -16,8 +15,6 @@ export default function GameOver({ socket, setRound }) {
       setWinners(memes);
     });
     socket.on('reset', () => {
-      setWinners([]);
-      socket.emit('deleteWinners');
       history.push('/');
     });
   }, []);
@@ -30,6 +27,11 @@ export default function GameOver({ socket, setRound }) {
               <p>Round: {i + 1} </p>
               <p>Creator: {meme.name} </p>
               <p>Points: {meme.likes}</p>
+              <button>
+                <Link to={meme.memeUrl} target="_blank" download>
+                  Click to Download
+                </Link>
+              </button>
             </div>
             <img src={meme.memeUrl} />
           </div>

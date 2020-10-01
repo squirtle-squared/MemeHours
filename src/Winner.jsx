@@ -32,7 +32,7 @@ export default function Winner({
   useEffect(() => {
     if (timesUp) {
       socket.emit('newRound', round + 1);
-      if (round + 1 === 4) {
+      if (round + 1 === 3) {
         socket.emit('gameOver');
       } else {
         socket.emit('ideate');
@@ -62,7 +62,7 @@ export default function Winner({
 
   return (
     <div>
-      <Timer mins={0} secs={10} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={2} setTimesUp={setTimesUp} />
       <h1>The Winning Meme of Round {round}</h1>
       {winner && (
         <div>

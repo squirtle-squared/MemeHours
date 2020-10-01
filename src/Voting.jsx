@@ -45,7 +45,7 @@ export default function Voting({ socket }) {
 
   return (
     <div>
-      <Timer mins={0} secs={20} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={6} setTimesUp={setTimesUp} />
       {candidates.length &&
         candidates.map((meme, i) => (
           <div key={`candidate-${i}`}>

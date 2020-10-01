@@ -92,6 +92,7 @@ export default function Home({ socket }) {
   const [submitClicked, setSubmitClicked] = useState(false);
   const [ideationTimesUp, setIdeationTimesUp] = useState(false);
   const [allSubmitted, setAllSubmitted] = useState(false);
+  const [winners, setWinners] = useState([]);
   const [self, setSelf] = useState({});
   const [round, setRound] = useState(1);
   const [winningMemes, setWinningMemes] = useState([]);
@@ -179,6 +180,8 @@ export default function Home({ socket }) {
           allSubmitted={allSubmitted}
           setIdeationTimesUp={setIdeationTimesUp}
           setAllSubmitted={setAllSubmitted}
+          winners={winners}
+          setWinners={setWinners}
           socket={socket}
           name={self.name}
           id={self.id}
@@ -198,7 +201,7 @@ export default function Home({ socket }) {
         />
       </Route>
       <Route path="/gameOver">
-        <GameOver setRound={setRound} socket={socket} />
+        <GameOver winners={winners} setWinners={setWinners} setRound={setRound} socket={socket} />
       </Route>
     </Switch>
   );
