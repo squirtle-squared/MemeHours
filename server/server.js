@@ -14,6 +14,8 @@ const io = socketIO(server);
 
 const players = [];
 const submissions = [];
+const roundWinners = [];
+
 io.on('connection', socket => {
   console.log('new client connected');
   socket.on('newPlayer', playerName => {
@@ -34,7 +36,7 @@ io.on('connection', socket => {
   socket.on('submitImage', ([name, id, memeUrl]) => {
     // console.log(name, memeUrl);
     // once submissions line 16 length === players length move on
-    submissions.push({ name, id, memeUrl });
+    submissions.push({ name, id, memeUrl, points: 0 });
     // console.log(submissions);
     if (submissions.length === players.length) io.emit('voting');
   });
