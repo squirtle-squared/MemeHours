@@ -201,6 +201,8 @@ export default function Home({ socket }) {
           setRound={setRound}
           winner={winner}
           setWinner={setWinner}
+          winners={winners}
+          setWinners={setWinners}
         />
       </Route>
       <Route path="/gameOver">

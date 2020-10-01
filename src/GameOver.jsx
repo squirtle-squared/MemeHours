@@ -9,12 +9,12 @@ export default function GameOver({ socket, setRound, winners, setWinners, self }
   };
 
   useEffect(() => {
-    setRound(1);
     socket.emit('getWinners');
     socket.on('getWinners', memes => {
       setWinners(memes);
     });
     socket.on('reset', () => {
+      setRound(1);
       history.push('/');
     });
   }, []);
@@ -24,7 +24,7 @@ export default function GameOver({ socket, setRound, winners, setWinners, self }
         winners.map((meme, i) => (
           <div key={`round-${i}`}>
             <div>
-              <p>Round: {i + 1} </p>
+              <p>Round: {meme.round} </p>
               <p>Creator: {meme.name} </p>
               <p>Points: {meme.likes}</p>
             </div>

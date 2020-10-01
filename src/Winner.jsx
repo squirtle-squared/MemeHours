@@ -11,6 +11,8 @@ export default function Winner({
   setRound,
   winner,
   setWinner,
+  winners,
+  setWinners,
 }) {
   const history = useHistory();
   const [timesUp, setTimesUp] = useState(false);
@@ -18,7 +20,7 @@ export default function Winner({
   useEffect(() => {
     socket.emit('getCandidates');
     socket.on('memeCandidates', candidates => {
-      let max = -Infinity;
+      let max = -1;
       let winningMeme;
       for (let candidate of candidates) {
         if (candidate.likes > max) {
@@ -26,7 +28,7 @@ export default function Winner({
           winningMeme = candidate;
         }
       }
-      setWinner(winningMeme);
+      socket.emit('roundWinner', winningMeme);
     });
   }, []);
 
@@ -42,11 +44,17 @@ export default function Winner({
     // socket.emit('newRound', round + 1);
   }, [timesUp]);
 
-  useEffect(() => {
-    socket.emit('roundWinner', winner);
-  }, [winner]);
+  // useEffect(() => {
+  //   socket.emit('roundWinner', winner);
+  // }, [winner]);
 
   useEffect(() => {
+    socket.on('roundWinner', meme => {
+      setWinner(meme);
+    });
+    socket.on('roundWinners', roundWinners => {
+      setWinners(roundWinners);
+    });
     socket.on('newRound', round => {
       setSubmitClicked(false);
       setIdeationTimesUp(false);
@@ -63,7 +71,7 @@ export default function Winner({
 
   return (
     <div>
-      <Timer mins={0} secs={2} setTimesUp={setTimesUp} />
+      <Timer mins={0} secs={5} setTimesUp={setTimesUp} />
       <h1>The Winning Meme of Round {round}</h1>
       {winner && (
         <div>

@@ -31,7 +31,7 @@ export default function Ideation({
 
   const handleSubmit = e => {
     e.preventDefault();
-    socket.emit('submitImage', [name, id, imgRef.current.src]);
+    socket.emit('submitImage', [name, id, imgRef.current.src, round]);
     setSubmitClicked(true);
   };
 
@@ -152,7 +152,7 @@ export default function Ideation({
     <div>
       <p>HELLO MEME HOURS!!!</p>
       <h1>Round {round}</h1>
-      <Timer mins={0} secs={6} setTimesUp={setIdeationTimesUp} />
+      <Timer mins={0} secs={20} setTimesUp={setIdeationTimesUp} />
       {currentMeme && (
         <div>
           <span>{currentMeme.name}</span>
