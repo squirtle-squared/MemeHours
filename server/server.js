@@ -13,8 +13,9 @@ const server = app.listen(port, () => console.log(`server listening on ${port}.`
 const io = socketIO(server);
 
 const players = [];
-const submissions = [];
-const roundWinners = [];
+let submissions = [];
+let roundWinners = [];
+let round;
 
 io.on('connection', socket => {
   console.log('new client connected');
@@ -33,16 +34,54 @@ io.on('connection', socket => {
     io.emit('randomNumber', Math.floor(Math.random() * 100));
   });
 
+  // socket.on('randomNumber', () => {
+  //   io.emit('randomNumber', Math.floor(Math.random() * 100));
+  // });
+
   socket.on('submitImage', ([name, id, memeUrl]) => {
     // console.log(name, memeUrl);
     // once submissions line 16 length === players length move on
-    submissions.push({ name, id, memeUrl, points: 0 });
+    submissions.push({ name, id, memeUrl, likes: 0 });
     // console.log(submissions);
     if (submissions.length === players.length) io.emit('voting');
   });
 
   socket.on('getCandidates', () => {
     socket.emit('memeCandidates', submissions);
+  });
+  socket.on('updateCandidates', memes => {
+    submissions = memes;
+    io.emit('updateCandidates', memes);
+  });
+
+  socket.on('roundWinner', meme => {
+    if (meme) {
+      if (meme.name) {
+        let isInList = false;
+        for (let winner of roundWinners) {
+          if (meme.memeUrl === winner.memeUrl) isInList = true;
+        }
+        if (!isInList) roundWinners.push(meme);
+      }
+    }
+  });
+
+  socket.on('newRound', newRound => {
+    round = newRound;
+    submissions = [];
+    io.emit('newRound', round);
+  });
+  socket.on('getWinners', () => {
+    socket.emit('getWinners', roundWinners);
+  });
+  socket.on('gameOver', () => {
+    io.emit('gameOver');
+  });
+  socket.on('reset', () => {
+    io.emit('reset');
+  });
+  socket.on('deleteWinners', () => {
+    roundWinners = [];
   });
 
   socket.on('disconnect', sckt => {

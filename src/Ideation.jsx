@@ -3,13 +3,21 @@ import { useHistory } from 'react-router-dom';
 import Timer from './Timer.jsx';
 const temps = require('./templates.js');
 
-export default function Ideation({ socket, name, id }) {
+export default function Ideation({
+  socket,
+  name,
+  id,
+  round,
+  submitClicked,
+  setSubmitClicked,
+  ideationTimesUp,
+  setIdeationTimesUp,
+  allSubmitted,
+  setAllSubmitted,
+}) {
   const [texts, setTexts] = useState(['', '', '', '', '', '', '']);
   const [templates, setTemplates] = useState(temps);
   const [currentMeme, setCurrentMeme] = useState(null);
-  const [submitClicked, setSubmitClicked] = useState(false);
-  const [timesUp, setTimesUp] = useState(false);
-  const [allSubmitted, setAllSubmitted] = useState(false);
   const imgRef = useRef(null);
   const history = useHistory();
 
@@ -93,8 +101,8 @@ export default function Ideation({ socket, name, id }) {
   }, []);
 
   useEffect(() => {
-    if (allSubmitted || timesUp) history.push('/voting');
-  }, [allSubmitted, timesUp]);
+    if (allSubmitted || ideationTimesUp) history.push('/voting');
+  }, [allSubmitted, ideationTimesUp]);
 
   const textBoxes = [];
   if (currentMeme) {
@@ -114,7 +122,8 @@ export default function Ideation({ socket, name, id }) {
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
-      <Timer mins={1} secs={0} setTimesUp={setTimesUp} />
+      <h1>Round {round}</h1>
+      <Timer mins={0} secs={50} setTimesUp={setIdeationTimesUp} />
       {currentMeme && (
         <div>
           <span>{currentMeme.name}</span>
@@ -123,14 +132,14 @@ export default function Ideation({ socket, name, id }) {
           <br />
         </div>
       )}
-      {!timesUp && !submitClicked && (
+      {!ideationTimesUp && !submitClicked && (
         <div>
           {textBoxes}
           <button onClick={handlePreview}>Preview</button>
           <button onClick={handleSubmit}>Submit</button>
         </div>
       )}
-      {!timesUp && submitClicked && (
+      {!ideationTimesUp && submitClicked && (
         <div>
           <h1>
             You have successfully submitted your meme! Please wait for others to submit or the time
