@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function Timer() {
-  const [minutes, setMinutes] = useState(1);
-  const [seconds, setSeconds] = useState(30);
+export default function Timer({ mins, secs }) {
+  const [minutes, setMinutes] = useState(mins);
+  const [seconds, setSeconds] = useState(secs);
 
   useEffect(() => {
     let myInterval = setInterval(() => {
       if (seconds > 0) {
-        setSeconds(seconds - 1);
+        setSeconds(seconds => seconds - 1);
       }
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(myInterval);
           alert("Time's Up!");
         } else {
-          setMinutes(minutes - 1);
+          setMinutes(minutes => minutes - 1);
           setSeconds(59);
         }
       }

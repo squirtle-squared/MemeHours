@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Timer from './timer.jsx';
-// import socketIOClient from 'socket.io-client';
+import Timer from './Timer.jsx';
 const temps = require('./templates.js');
 
 export default function Ideation({ socket }) {
@@ -101,7 +100,7 @@ export default function Ideation({ socket }) {
   return (
     <div>
       <p>HELLO MEME HOURS!!!</p>
-      <Timer />
+      <Timer mins={1} secs={30} />
       {currentMeme && <span>{currentMeme.name}</span>}
       <br />
       {currentMeme && <img ref={imgRef} src={currentMeme.url} />}
