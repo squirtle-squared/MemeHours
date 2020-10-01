@@ -185,7 +185,7 @@ export default function Home({ socket }) {
         />
       </Route>
       <Route path="/voting">
-        <Voting socket={socket} />
+        <Voting socket={socket} name={self.name} id={self.id} />
       </Route>
       <Route path="/winner">
         <Winner
